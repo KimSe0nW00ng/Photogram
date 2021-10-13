@@ -24,6 +24,6 @@ public class AuthService {
 		user.setPassword(encPassword);
 		user.setRole("ROLE_USER"); // 관리자 ROLE_ADMIN
 		User userEntity = userRepository.save(user);
-		return userEntity;
+		return userEntity; 
 	}
 }
