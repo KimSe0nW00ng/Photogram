@@ -2,6 +2,8 @@ package com.cos.photogramstart.web.api;
 
 import java.util.List;
 
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -22,7 +24,8 @@ public class ImageApiController {
 	private final ImageService imageService;
 	
 	@GetMapping("/api/image")
-	public ResponseEntity<?> ImageStroy(@AuthenticationPrincipal PrincipalDetails principalDetails){
+	public ResponseEntity<?> imageStroy(@AuthenticationPrincipal PrincipalDetails principalDetails
+			){
 		List<Image> images = imageService.이미지스토리(principalDetails.getUser().getId());
 		return new ResponseEntity<>(new CMRespDto<>(1,"성공",images), HttpStatus.OK);
 	}
