@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,8 +25,9 @@ public class ImageService {
 
 	private final ImageRepository imageRepository;
 	@Transactional(readOnly = true) // 좋은점 영속성 컨텍스트에서 변경 감지를 해서 더티체킹 진행 flush(반영)DB에 저장 등 ==>이걸 안하게됨 =>성능향상
-	public List<Image> 이미지스토리(int principalid){
-		List<Image> images = imageRepository.mStory(principalid);
+	public Page<Image> 이미지스토리(int principalid, Pageable pageable){
+		// ImageApiController에서 넘긴 pageable을 받는다
+		Page<Image> images = imageRepository.mStory(principalid,pageable);
 		return images;
 	}
 	
