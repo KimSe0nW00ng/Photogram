@@ -1,6 +1,5 @@
 
 function storyLoad() {
-	console.log("나 실행되?");
 	$.ajax({
 		url : `/api/image`,
 		dataType:"json"
@@ -11,12 +10,10 @@ function storyLoad() {
 			$("#storyList").append(storyitem);
 		});
 	}).fail(error=>{
-		console.log("어류",error);
+		console.log("오류",error);
 	});
 }
 storyLoad();
-
-
 
 function getStoryItem(image) {
 	let item = `<div class="story-list__item">

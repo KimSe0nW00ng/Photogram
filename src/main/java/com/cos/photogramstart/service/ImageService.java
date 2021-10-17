@@ -25,6 +25,12 @@ import lombok.RequiredArgsConstructor;
 public class ImageService {
 
 	private final ImageRepository imageRepository;
+	
+	@Transactional(readOnly = true)
+	public List<Image> 인기사진(){
+		return imageRepository.mPopular();
+	}
+	
 	@Transactional(readOnly = true) // 좋은점 영속성 컨텍스트에서 변경 감지를 해서 더티체킹 진행 flush(반영)DB에 저장 등 ==>이걸 안하게됨 =>성능향상
 	public Page<Image> 이미지스토리(int principalid, Pageable pageable){
 		// ImageApiController에서 넘긴 pageable을 받는다

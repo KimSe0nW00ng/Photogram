@@ -43,7 +43,15 @@ function toggleSubscribeModal(obj) {
 }
 
 // (4) 유저 프로파일 사진 변경 (완)
-function profileImageUpload() {
+function profileImageUpload(pageUserid, principalid) {
+	console.log("pageUserid", pageUserid);
+	console.log("principalid", principalid);
+	
+	if(pageUserid != principalid){
+	alert("프로필 사진을 수정할 수 없는 유저입니다.");
+		return;
+	}
+	
 	$("#userProfileImageInput").click();
 
 	$("#userProfileImageInput").on("change", (e) => {
