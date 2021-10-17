@@ -53,13 +53,13 @@ function getStoryItem(image) {
 				}else{
 					item += `<i class="far fa-heart" id="storyLikeIcon-${image.id}" onclick="toggleLike(${image.id})"></i>`;
 			
-				}
+				};
 				
 			item += `
 			</button>
 		</div>
 
-		<span class="like"><b id="storyLikeCount-1">3 </b>likes</span>
+		<span class="like"><b id="storyLikeCount-${image.id}">${image.likeCount} </b>likes</span>
 
 		<div class="sl__item__contents__content">
 			<p>${image.caption}</p>
@@ -99,7 +99,7 @@ $(window).scroll(() => {
 	let checkNum = $(window).scrollTop() - ($(document).height() - $(window).height());
 	console.log(checkNum);
 	
-	if(checkNum < 10 && checkNum >-10){
+	if(checkNum < 1 && checkNum >-1){
 		page++;
 		storyLoad();
 	}
@@ -109,14 +109,45 @@ $(window).scroll(() => {
 // (3) 좋아요, 안좋아요
 function toggleLike(imageid) {
 	let likeIcon = $(`#storyLikeIcon-${imageid}`);
-	if (likeIcon.hasClass("far")) {
-		likeIcon.addClass("fas");
-		likeIcon.addClass("active");
-		likeIcon.removeClass("far");
-	} else {
-		likeIcon.removeClass("fas");
-		likeIcon.removeClass("active");
-		likeIcon.addClass("far");
+	
+	if (likeIcon.hasClass("far")) { 
+		$.ajax({
+			type:"post",
+			url:`/api/image/${imageid}/likes`,
+			dataType:"json"
+		}).done(res=>{
+			
+			let likeCountStr = $(`#storyLikeCount-${imageid}`).text();
+			let likeCount = Number(likeCountStr) + 1;
+			$(`#storyLikeCount-${imageid}`).text(likeCount);
+			
+			likeIcon.addClass("fas");
+			likeIcon.addClass("active");
+			likeIcon.removeClass("far");
+		}).fail(error=>{
+			console.log("오류",error);
+		});
+		
+		
+	} else {// 좋아요 취소하겠다
+		$.ajax({
+			type:"delete",
+			url:`/api/image/${imageid}/likes`,
+			dataType:"json"
+		}).done(res=>{
+			
+			let likeCountStr = $(`#storyLikeCount-${imageid}`).text();
+			let likeCount = Number(likeCountStr) - 1;
+			$(`#storyLikeCount-${imageid}`).text(likeCount);
+			
+			likeIcon.removeClass("fas");
+			likeIcon.removeClass("active");
+			likeIcon.addClass("far");
+		}).fail(error=>{
+			console.log("오류",error);
+		});
+		
+		
 	}
 }
 

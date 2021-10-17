@@ -21,7 +21,7 @@ spring:
   jpa:
     open-in-view: true
     hibernate:
-      ddl-auto: update #create 서버 재실행시 초기화
+      ddl-auto: update #create 서버 재실행시 초기화 
       
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
