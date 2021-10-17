@@ -39,6 +39,7 @@ public class Likes { //N
 	@GeneratedValue(strategy = GenerationType.IDENTITY) // 번호 증가 전략이 데이터베이스를 따라간다.
 	private int id;
 	
+	//무한 참조됨
 	@JoinColumn(name="imageid")
 	@ManyToOne
 	private Image image; // 1
@@ -51,6 +52,7 @@ public class Likes { //N
 	private LocalDateTime createDate;
 	
 	@PrePersist // 디비에 INSERT 되기 직전에 실행 
+	//nativeQuery를 쓰면 안들어간다
 	public void createDate() {
 		this.createDate = LocalDateTime.now();
 	}
