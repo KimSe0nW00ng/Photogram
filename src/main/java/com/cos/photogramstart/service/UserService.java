@@ -1,12 +1,20 @@
 package com.cos.photogramstart.service;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.UUID;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.cos.photogramstart.domain.Subscribe.SubscribeRepositoty;
 import com.cos.photogramstart.domain.User.User;
 import com.cos.photogramstart.domain.User.UserRepository;
+import com.cos.photogramstart.handler.ex.CustomApiException;
 import com.cos.photogramstart.handler.ex.CustomException;
 import com.cos.photogramstart.handler.ex.CustomvalidationApiException;
 import com.cos.photogramstart.web.dto.user.UserProfileDto;
@@ -20,6 +28,34 @@ public class UserService {
 	private final UserRepository userRepository;
 	private final SubscribeRepositoty subscribeRepositoty;
 	private final BCryptPasswordEncoder bCryptPasswordEncoder;
+	
+	@Value("${file.path}") // 경로 지정하는 어노테이션 - yml파일에 정보 있음
+	private String uploadFolder;
+	
+	@Transactional
+	public User 회원프로필사진변경 (int principalid, MultipartFile profileImageFile) {
+		UUID uuid = UUID.randomUUID(); // uuid를 통해 고유아이디 추가해서 파일 덮어씌움 해결
+
+		String imageFileName = uuid + "-" + profileImageFile.getOriginalFilename(); // 파일 이름이 업로드됨 ex 1.jpg
+		// 똑같은 파일명으로 저장 할 경우 덮어씌워지게됨
+
+		System.out.println("이미지 파일 이름:" + imageFileName);
+
+		Path imageFilePath = Paths.get(uploadFolder + imageFileName);
+		// 통신, I/O ->예외 발생 가능성 있음
+		try {
+			Files.write(imageFilePath, profileImageFile.getBytes());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		User userEntity = userRepository.findById(principalid).orElseThrow(()->{
+			throw new CustomApiException("유저를 찾을 수 없습니다.");
+		});
+		userEntity.setProfileimageUrl(imageFileName);
+		
+		return userEntity;
+	}// 더티체킹으로 업데이트 됨
 	
 	@Transactional(readOnly=true) //변경감지를 안하게 됨 연산과정 생략 능률 향상~~
 	public UserProfileDto 회원프로필(int pageUserid, int principalid) { // 해당 페이지의 아이디

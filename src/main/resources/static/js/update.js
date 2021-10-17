@@ -5,6 +5,7 @@ function update(userid,event) {
 	//header.jsp에 j쿼리 쓸수 있도록 해놓음
 	let data = $("#profileUpdate").serialize(); // update.jsp에 있는 폼!
 	// 폼태그가 가지고 있는 인풋값을 끌어옴
+	//key - value 전송할 때
 	console.log(data);
 	
 	$.ajax({

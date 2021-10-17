@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.cos.photogramstart.config.Auth.PrincipalDetails;
 import com.cos.photogramstart.domain.User.User;
@@ -33,6 +34,16 @@ public class UserApiController {
 
 	private final UserService userService;
 	private final SubscribeService subscribeService;
+	
+	@PutMapping("/api/user/{principalid}/profileImageUrl")
+	public ResponseEntity<?> profileImageUrlUpdate(@PathVariable int principalid, MultipartFile profileImageFile,
+			//사진을 받기 위해서 MultipartFile사용, 폼태그에 있는 파일 받아오는 name값(profileImageFile)과 일치해야 받아온다
+			@AuthenticationPrincipal PrincipalDetails principalDetails){
+			//사진을 받고나서 세션이 변경되어야 업데이트가 바로 적용 되므로 위에 추가
+		User userEntitiy = userService.회원프로필사진변경(principalid, profileImageFile);
+		principalDetails.setUser(userEntitiy);//세션 변경
+		return new ResponseEntity<>(new CMRespDto<>(1,"프로필사진 변경 성공",null),HttpStatus.OK);
+	}
 	
 	@GetMapping("/api/user/{pageUserid}/subscribe")
 	public ResponseEntity<?> subscribeList(@PathVariable int pageUserid, @AuthenticationPrincipal PrincipalDetails principalDetails){
