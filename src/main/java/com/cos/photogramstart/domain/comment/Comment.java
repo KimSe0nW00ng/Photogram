@@ -2,6 +2,7 @@ package com.cos.photogramstart.domain.comment;
 
 import java.time.LocalDateTime;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -14,6 +15,7 @@ import javax.persistence.PrePersist;
 
 import com.cos.photogramstart.domain.User.User;
 import com.cos.photogramstart.domain.image.Image;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -34,14 +36,16 @@ public class Comment {
 	@Column(length = 100, nullable = false) // 글자 제한, null제한
 	private String content;// 내용
 	
-	//무엇인가를 select할때 따라오는것이 1개라면 기본적으로 EAGER전략을 사용하고 반대 경우에는 LAZY전략을 사용
-	@ManyToOne(fetch = FetchType.EAGER) // 한명은 여러개 댓글
+	//무엇인가를 select할때 따라오는것이 1개라면 기본적으로 EAGER전략을 사용하고 반대 경우에는 LAZY전략을 사용 
+	
+	@JsonIgnoreProperties({"images"})
 	@JoinColumn(name = "userid")
+	@ManyToOne(fetch = FetchType.EAGER) // 한명은 여러개 댓글
 	private User user;
 	
-	@ManyToOne(fetch = FetchType.EAGER) // 한개 이미지는 여러개 댓글
 	@JoinColumn(name = "imageid")
-	private Image image;
+	@ManyToOne(fetch = FetchType.EAGER) // 한개 이미지는 여러개 댓글 // fetch = FetchType.EAGER사용시 오류로 변경!!
+	private Image image; 
 	
 	private LocalDateTime createDate;
 
