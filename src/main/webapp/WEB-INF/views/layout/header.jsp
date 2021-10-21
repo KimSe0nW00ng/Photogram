@@ -8,6 +8,7 @@
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -33,9 +34,12 @@
 
 <body>
 	
+	<!-- principalid 담아두는곳 -->
+	<input type="hidden" id="principalid" value="${principal.user.id}"/>
+	
 	<header class="header">
 		<div class="container">
-			<a href="/" class="logo">
+			<a href="/image/story" class="logo">
 				<img src="/images/logo.jpg" alt="">
 			</a>
 			<nav class="navi">
@@ -53,3 +57,5 @@
 			</nav>
 		</div>
 	</header>
+
+	

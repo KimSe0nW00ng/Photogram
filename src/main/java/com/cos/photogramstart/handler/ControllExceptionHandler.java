@@ -33,13 +33,11 @@ public class ControllExceptionHandler {
 
 	@ExceptionHandler(CustomvalidationApiException.class)
 	public ResponseEntity<?> validationApiException(CustomvalidationApiException e) {
-		System.out.println("+========================나시랳ㅇ/?");
 		return new ResponseEntity<>(new CMRespDto<>(-1, e.getMessage(), e.getErrorMap()), HttpStatus.BAD_REQUEST);
 	}
 
 	@ExceptionHandler(CustomApiException.class)
 	public ResponseEntity<?> ApiException(CustomApiException e) {
-		System.out.println("+========================나시랳ㅇ/?");
 		return new ResponseEntity<>(new CMRespDto<>(-1, e.getMessage(), null), HttpStatus.BAD_REQUEST);
 	}
 
